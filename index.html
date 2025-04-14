@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Space Shooter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js"></script>
+</head>
+<body>
+  <div class="page-wrapper">
+    <div id="header">
+      <h1>Space Shooter</h1>
+      <img src="assets/images/logo.png" alt="Game Logo" />
+    </div>
+
+    <div id="menu">
+      <button onclick="showScreen('welcome')">Home</button>
+      <button onclick="showScreen('register')">Register</button>
+      <button onclick="showScreen('login')">Login</button>
+      <button onclick="showAboutModal()">About</button>
+      <button onclick="showScreen('leaderboard')" id="leaderboardBtn" style="display: none;">Leaderboard</button>
+      <button id="logoutBtn" onclick="logout()" style="display: none;">Logout</button>
+    </div>
+
+    <div id="content">
+      <div id="welcome" class="screen active">
+        <h2>Welcome to Space Shooter</h2>
+        <div class="game-info">
+          <div>
+            <h3>Created By</h3>
+            <p>Fadi zoabi ID: 214026775</p>
+            <p>Atheel mzlbt ID: 21284679 </p>
+          </div>
+        </div>
+        <p>Experience the thrill of space combat in this exciting arcade shooter! Navigate through asteroid fields, dodge enemy fire, and become the ultimate space pilot.</p>
+        <div class="buttons">
+          <button onclick="showScreen('register')">Register</button>
+          <button onclick="showScreen('login')">Login</button>
+        </div>
+      </div>
+
+      <div id="leaderboard" class="screen">
+        <h2>Leaderboard</h2>
+        <div id="scoreTable">
+          <h3>Top Scores</h3>
+          <table class="score-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Score</th>
+                <th>Level</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+          <p>Keep playing to climb the ranks!</p>
+        </div>
+        <button onclick="clearLeaderboard()" class="clear-leaderboard-btn">Clear Leaderboard</button>
+        <button onclick="showScreen('welcome')">Back to Home</button>
+      </div>
+
+      <div id="register" class="screen">
+        <h2>Register</h2>
+        <form id="registerForm">
+          <input type="text" placeholder="First Name" name="first" required />
+          <input type="text" placeholder="Last Name" name="last" required />
+          <input type="email" placeholder="Email" name="email" required />
+          <input type="text" placeholder="Username" name="username" required />
+          <input type="password" placeholder="Password" name="password" required />
+          <input type="password" placeholder="Confirm Password" name="confirm" required />
+          <div class="date-selectors">
+            <select name="year"></select>
+            <select name="month"></select>
+            <select name="day"></select>
+          </div>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+
+      <div id="login" class="screen">
+        <h2>Login</h2>
+        <form id="loginForm">
+          <input type="text" placeholder="Username" name="username" required />
+          <input type="password" placeholder="Password" name="password" required />
+          <button type="submit">Login</button>
+        </form>
+      </div>
+
+      <div id="config" class="screen">
+        <h2>Game Configuration</h2>
+        <form id="configForm">
+          <div class="config-item">
+            <label for="shootKey">Shoot Key:</label>
+            <input type="text" id="shootKey" name="shootKey" value=" " maxlength="1" />
+          </div>
+          <div class="config-item">
+            <label for="duration">Game Duration (minutes):</label>
+            <input type="number" id="duration" name="duration" value="2" min="1" max="10" />
+          </div>
+          <div class="config-item">
+            <label for="color">Ship Color:</label>
+            <div class="color-options">
+              <div class="color-option">
+                <input type="radio" id="color-blue" name="color" value="#4a4aff" checked />
+                <label for="color-blue" class="color-label blue">Blue</label>
+              </div>
+              <div class="color-option">
+                <input type="radio" id="color-green" name="color" value="#4aff4a" />
+                <label for="color-green" class="color-label green">Green</label>
+              </div>
+              <div class="color-option">
+                <input type="radio" id="color-orange" name="color" value="#ffa500" />
+                <label for="color-orange" class="color-label orange">Orange</label>
+              </div>
+              <div class="color-option">
+                <input type="radio" id="color-red" name="color" value="#ff4a4a" />
+                <label for="color-red" class="color-label red">Red</label>
+              </div>
+            </div>
+          </div>
+          <button type="button" onclick="startGame()" class="start-game-btn">Start Game</button>
+        </form>
+      </div>
+
+      <div id="game" class="screen">
+        <div class="game-info">
+          <div id="timer">Time: 120</div>
+          <div id="score">Score: 0</div>
+          <div id="lives">Lives: 3</div>
+          <div id="speed-level">Speed: x1</div>
+        </div>
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+      </div>
+
+      <div id="gameOver" class="screen">
+        <h2 id="gameOverMessage"></h2>
+        <div id="scoreTable">
+          <h3>Top Scores</h3>
+          <table class="score-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Score</th>
+                <th>Level</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+          <p>Keep playing to climb the ranks!</p>
+        </div>
+        <button onclick="startNewGame()">New Game</button>
+      </div>
+
+      <div id="aboutModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>About</h2>
+          <div class="about-content">
+            <h3>Submitters</h3>
+            <p>Fadi Zouabi - 214026775</p>
+            <p>Atheel mzlbt - 212846794</p>
+            
+            <h3>Implementation Details</h3>
+            <ul>
+              <li><strong>Template Usage:</strong> No template was used. The game was built from scratch using pure HTML, CSS, and JavaScript.</li>
+              <li>We used the 'Space Shooter Redux' for graphic shuttles</li>
+              <a href="https://www.kenney.nl/assets/space-shooter-redux">    Link</a>
+              <li><strong>jQuery Usage:</strong> No jQuery or jQuery plugins were used. The game is implemented using vanilla JavaScript for better performance and smaller file size.</li>
+            </ul>
+            
+            <h3>Development Challenges</h3>
+            <ul>
+              <li>Implementing smooth player movement and rotation mechanics</li>
+              <li>Creating responsive collision detection between bullets and game objects</li>
+              <li>Managing game state and score tracking across sessions</li>
+              <li>Designing an intuitive user interface for game configuration</li>
+              <li>Implementing secure user authentication and data storage</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Contact Information</h4>
+          <p>Email: fadiz@post.bgu.ac.il , --PUT YOUR EMAIL--</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Space Shooter. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+
+  <audio id="bg-music" src="assets/sounds/background.mp3" loop></audio>
+  <audio id="shoot-sound" src="assets/sounds/shoot.ogg"></audio>
+  <audio id="enemy-shoot" src="assets/sounds/enemy_shoot.ogg"></audio>
+  <audio id="hit-enemy" src="assets/sounds/hit_enemy.wav"></audio>
+  <audio id="hit-player" src="assets/sounds/hit_player.wav"></audio>
+  <audio id="game-over" src="assets/sounds/game_over.wav"></audio>
+  <audio id="level-complete" src="assets/sounds/level_complete.wav"></audio>
+  <audio id="game-start" src="assets/sounds/game_start.wav"></audio>
+</body>
+</html>
